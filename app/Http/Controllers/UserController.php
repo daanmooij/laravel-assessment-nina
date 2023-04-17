@@ -12,4 +12,17 @@ class UserController extends Controller
         $users = User::all();
         return collect($users);
     }
+
+    public function search(Request $request)
+    {
+        $query = User::query();
+        $searchableFields = ['name', 'age', 'gender', 'location', 'religion'];
+        foreach ($searchableFields as $field) {
+            if ($request->has($field)) {
+                $query->where($field, $request->get($field));
+            }
+        }
+        $users = $query->get();
+        return collect($users);
+    }
 }
